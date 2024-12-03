@@ -11,16 +11,5 @@ import java.util.List;
 
 @ApplicationScoped
 public class TennisMatchRepository {
-    private final ObjectMapper objectMapper;
-    private final TennisMatchService tennisMatchService;
 
-    public TennisMatchRepository(ObjectMapper objectMapper, TennisMatchService tennisMatchService) {
-        this.objectMapper = objectMapper;
-        this.tennisMatchService = tennisMatchService;
-    }
-
-    public String getTodayTennisMatches() throws JsonProcessingException {
-        String jsonResponse = tennisMatchService.getTodayTennisMatches();
-        return jsonResponse;
-    }
 }

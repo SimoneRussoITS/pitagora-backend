@@ -1,5 +1,6 @@
 package org.giannico.russo.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.giannico.russo.client.SofascoreClient;

@@ -7,7 +7,7 @@ import org.bson.types.ObjectId;
 import java.time.LocalDate;
 
 @MongoEntity(collection = "tennis-player")
-public class TennisPlayer {
+public class    TennisPlayer {
     private ObjectId id;
     private String firstName;
     private String lastName;

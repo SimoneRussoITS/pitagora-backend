@@ -8,21 +8,22 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.giannico.russo.persistence.model.TennisMatch;
 import org.giannico.russo.persistence.repository.TennisMatchRepository;
+import org.giannico.russo.service.TennisMatchService;
 
 import java.util.List;
 
 @Path("/tennis/match")
 public class TennisMatchResource {
-    private final TennisMatchRepository tennisMatchRepository;
+    private final TennisMatchService service;
 
-    public TennisMatchResource(TennisMatchRepository tennisMatchRepository) {
-        this.tennisMatchRepository = tennisMatchRepository;
+    public TennisMatchResource(TennisMatchService tennisMatchService) {
+        this.service = tennisMatchService;
     }
 
     @GET
     @Path("/today")
     @Produces(MediaType.APPLICATION_JSON)
     public String getTodayTennisMatches() throws JsonProcessingException {
-        return tennisMatchRepository.getTodayTennisMatches();
+        return service.getTodayTennisMatches();
     }
 }
