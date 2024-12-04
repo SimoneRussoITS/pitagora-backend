@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Round {
+    UNKNOWN("Unknown"),              // Sconosciuto
     QUALIFYING_ROUND_1("Qualifying Round 1"),  // Primo turno delle qualificazioni
     QUALIFYING_ROUND_2("Qualifying Round 2"),  // Secondo turno delle qualificazioni
     QUALIFYING_ROUND_3("Qualifying Round 3"),  // Terzo turno delle qualificazioni
@@ -16,7 +17,11 @@ public enum Round {
     SEMI_FINAL("Semifinal"),          // Semifinale
     FINAL("Final"),               // Finale
     PLAY_OFF("Play-Off"),            // Spareggio (es. Coppa Davis per qualificarsi)
-    BRONZE_MEDAL_MATCH("Bronze Medal Match");  // Match per il terzo posto (es. Olimpiadi)
+    BRONZE_MEDAL_MATCH("Bronze Medal Match"),  // Match per il terzo posto (es. Olimpiadi)
+    ROUND_OF_16("Round of 16"),         // Ottavi di finale
+    ROUND_OF_32("Round of 32"),         // Sedicesimi di finale
+    ROUND_OF_64("Round of 64");         // Trentaduesimi di finale
+
 
     private final String description;
 

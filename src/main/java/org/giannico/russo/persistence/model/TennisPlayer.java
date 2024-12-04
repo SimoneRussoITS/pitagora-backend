@@ -1,5 +1,6 @@
 package org.giannico.russo.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
@@ -7,8 +8,8 @@ import org.bson.types.ObjectId;
 import java.time.LocalDate;
 
 @MongoEntity(collection = "tennis-player")
-public class    TennisPlayer {
-    private ObjectId id;
+public class TennisPlayer {
+    private String id;
     private String firstName;
     private String lastName;
     private LocalDate birthDay;
@@ -17,11 +18,22 @@ public class    TennisPlayer {
     private int weight;
     private int height;
 
-    public ObjectId getId() {
+    public TennisPlayer(String id, String firstName, String lastName, LocalDate birthDay, int atpRanking, String nationality, int weight, int height) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDay = birthDay;
+        this.atpRanking = atpRanking;
+        this.nationality = nationality;
+        this.weight = weight;
+        this.height = height;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

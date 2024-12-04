@@ -1,6 +1,7 @@
 package org.giannico.russo.persistence.model;
 
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
 import org.giannico.russo.persistence.model.enums.Category;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @MongoEntity(collection = "tennis-tournament")
 public class TennisTournament {
-    private ObjectId id;
+    private String id;
     private String name;
     private int year;
     private String location;
@@ -23,11 +24,36 @@ public class TennisTournament {
     private String winner;
     private Status status;
 
-    public ObjectId getId() {
+    // Costruttore per il parsing del JSON
+    @JsonCreator
+    public TennisTournament(
+            @JsonProperty("name") String name,
+            @JsonProperty("year") int year,
+            @JsonProperty("location") String location,
+            @JsonProperty("startDate") LocalDate startDate,
+            @JsonProperty("endDate") LocalDate endDate,
+            @JsonProperty("surface") String surface,
+            @JsonProperty("category") Category category,
+            @JsonProperty("groups") List<Group> groups,
+            @JsonProperty("winner") String winner,
+            @JsonProperty("status") Status status) {
+        this.name = name;
+        this.year = year;
+        this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.surface = surface;
+        this.category = category;
+        this.groups = groups;
+        this.winner = winner;
+        this.status = status;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

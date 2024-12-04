@@ -5,7 +5,10 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import org.giannico.russo.persistence.model.TennisMatch;
 import org.giannico.russo.service.TennisMatchService;
+
+import java.util.List;
 
 @Path("/tennis/match")
 public class TennisMatchResource {
@@ -18,7 +21,7 @@ public class TennisMatchResource {
     @GET
     @Path("/today")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getTodayTennisMatches() throws JsonProcessingException {
+    public List<TennisMatch> getTodayTennisMatches() throws JsonProcessingException {
         return tennisMatchService.getTodayTennisMatches();
     }
 }
