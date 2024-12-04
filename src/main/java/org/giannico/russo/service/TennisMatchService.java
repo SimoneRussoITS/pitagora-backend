@@ -16,7 +16,7 @@ public class TennisMatchService implements PanacheMongoRepository<TennisMatch> {
     }
 
     public String getTodayTennisMatches() {
-        String today = LocalDate.now().toString();
+        String today = LocalDate.now().plusDays(1).toString();
         String endpoint = "api/v1/sport/tennis/scheduled-events/" + today;
         return sofascoreClient.fetchTennisData(endpoint);
     }

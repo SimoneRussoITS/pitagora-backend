@@ -20,4 +20,6 @@ public class TennisPlayerResource {
     public String getAllTennisPlayersInAtpRanking(){
         return tennisPlayerService.getAllTennisPlayersInAtpRanking();
     }
+
+
 }
