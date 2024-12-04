@@ -1,5 +1,6 @@
 package org.giannico.russo.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
 import org.giannico.russo.persistence.model.enums.Round;
@@ -11,7 +12,11 @@ import java.util.List;
 @MongoEntity(collection = "tennis-match")
 public class TennisMatch {
     private ObjectId id;
+
+    @JsonProperty("tournament")
     private TennisTournament tournament;
+
+    @JsonProperty("roundInfo")
     private Round round;
     private LocalDateTime scheduledOnAt;
     private TennisPlayer homePlayer;
