@@ -24,31 +24,6 @@ public class TennisTournament {
     private String winner;
     private Status status;
 
-    // Costruttore per il parsing del JSON
-    @JsonCreator
-    public TennisTournament(
-            @JsonProperty("name") String name,
-            @JsonProperty("year") int year,
-            @JsonProperty("location") String location,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("endDate") LocalDate endDate,
-            @JsonProperty("surface") String surface,
-            @JsonProperty("category") Category category,
-            @JsonProperty("groups") List<Group> groups,
-            @JsonProperty("winner") String winner,
-            @JsonProperty("status") Status status) {
-        this.name = name;
-        this.year = year;
-        this.location = location;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.surface = surface;
-        this.category = category;
-        this.groups = groups;
-        this.winner = winner;
-        this.status = status;
-    }
-
     public String getId() {
         return id;
     }
