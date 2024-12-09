@@ -18,18 +18,17 @@ public class TennisMatchRepository {
 
     public List<TennisMatch> parseTennisMatches(String json) {
         try {
-            // Deserializza l'oggetto principale (EventResponse) che contiene "events"
+            // Deserialize the json passed in the method
             EventResponse eventResponse = objectMapper.readValue(json, EventResponse.class);
-            // Estrai l'array di eventi
+            // Extract the array of events
             List<Map<String, Object>> events = eventResponse.getEvents();
-            // Puoi ora convertire ogni elemento dell'array (evento) in un oggetto TennisMatch
-            List<TennisMatch> tennisMatches = objectMapper.convertValue(
+            // Convert each element in a TennisMatch object and return the complete list
+            return objectMapper.convertValue(
                     events,
                     objectMapper
                             .getTypeFactory()
                             .constructCollectionType(List.class, TennisMatch.class)
             );
-            return tennisMatches;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Errore durante il parsing del JSON", e);
