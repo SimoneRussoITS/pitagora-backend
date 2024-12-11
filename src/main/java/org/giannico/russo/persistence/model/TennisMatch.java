@@ -213,10 +213,10 @@ public class TennisMatch {
             if (yearObj != null) {
                 try {
                     // Se year è una String, proviamo a convertirlo in Integer
-                    tournament.setYear(Integer.parseInt(yearObj.toString()));
+                    tournament.setYears(Integer.parseInt(yearObj.toString()));
                 } catch (NumberFormatException e) {
                     // Gestisci l'errore di parsing se la stringa non è un numero
-                    tournament.setYear(0); // Imposta un valore di fallback o fai una gestione adeguata
+                    tournament.setYears(0); // Imposta un valore di fallback o fai una gestione adeguata
                 }
             }
         }

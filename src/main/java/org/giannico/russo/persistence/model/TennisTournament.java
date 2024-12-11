@@ -1,9 +1,8 @@
 package org.giannico.russo.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.mongodb.panache.common.MongoEntity;
-import org.bson.types.ObjectId;
 import org.giannico.russo.persistence.model.enums.Category;
 import org.giannico.russo.persistence.model.enums.Status;
 
@@ -12,10 +11,11 @@ import java.util.List;
 
 @MongoEntity(collection = "tennis-tournament")
 public class TennisTournament {
+    @JsonIgnore
     private String id;
     private String name;
-    private int year;
     private String location;
+    private List<Integer> years;
     private LocalDate startDate;
     private LocalDate endDate;
     private String surface;
@@ -40,20 +40,20 @@ public class TennisTournament {
         this.name = name;
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public List<Integer> getYears() {
+        return years;
+    }
+
+    public void setYears(List<Integer> years) {
+        this.years = years;
     }
 
     public LocalDate getStartDate() {
@@ -110,5 +110,9 @@ public class TennisTournament {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @JsonCreator
+    public TennisTournament() {
     }
 }

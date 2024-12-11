@@ -19,6 +19,8 @@ public class SofascoreClient {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("https://www.sofascore.com/" + endpoint))
+                    .header("User-Agent", "Mozilla/5.0 (compatible)")
+                    .header("Accept", "application/json")
                     .GET()
                     .build();
 
