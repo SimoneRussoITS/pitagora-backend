@@ -2,6 +2,7 @@ package org.giannico.russo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.Response;
 import org.giannico.russo.client.SofascoreClient;
 import org.giannico.russo.persistence.model.TennisPlayer;
 import org.giannico.russo.persistence.repository.TennisPlayerRepository;
@@ -61,7 +62,13 @@ public class TennisPlayerService {
             String playerJson  = sofascoreClient.fetchTennisData(playerEndpoint + playerId);
             TennisPlayer player = tennisPlayerRepository.parseJsonToTennisPlayer(playerJson);
             tennisPlayers.add(player);
+            insertTennisPlayerInDatabase(player);
         }
         return tennisPlayers;
+    }
+
+    private void insertTennisPlayerInDatabase(TennisPlayer player){
+        tennisPlayerRepository.persist(player);
+//        return Response.ok().entity("Giocatore inserito correttamente nel database").build();
     }
 }

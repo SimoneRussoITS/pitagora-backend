@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.mongodb.panache.common.MongoEntity;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
 
 import java.time.*;
 import java.util.Map;
@@ -11,20 +13,27 @@ import java.util.Map;
 @MongoEntity(collection = "tennis-player")
 public class TennisPlayer {
     @JsonIgnore
-    private String id;
+    @BsonProperty("_id")
+    private ObjectId id;
+    @BsonProperty("firstName")
     private String firstName;
+    @BsonProperty("lastName")
     private String lastName;
+    @BsonProperty("birthDay")
     private LocalDate birthDay;
+    @BsonProperty("atpRanking")
     private int atpRanking;
+    @BsonProperty("nationality")
     private String nationality;
+    @BsonProperty("weight")
     private int weight;
+    @BsonProperty("height")
     private int height;
 
     public TennisPlayer() {
 
     }
-
-    public TennisPlayer(String id, String firstName, String lastName, LocalDate birthDay, int atpRanking, String nationality, int weight, int height) {
+    public TennisPlayer(ObjectId id, String firstName, String lastName, LocalDate birthDay, int atpRanking, String nationality, int weight, int height) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,11 +44,11 @@ public class TennisPlayer {
         this.height = height;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -99,53 +108,39 @@ public class TennisPlayer {
         this.height = height;
     }
 
-    String name = "Moeller, Elmer";
 
     @JsonCreator
     public TennisPlayer(
             @JsonProperty("team") Map<String, Object> team,
             Map<Integer, Integer> idRankMap) {
-        this.id = team.get("id").toString();
 
-        this.firstName = team.get("fullName").toString();
-        System.out.println(this.firstName);
-        this.lastName = team.get("fullName").toString().split(",")[0].trim();
-
-        if (this.firstName.equals(name)){
-            System.out.println("1");
+        String fullName = team.get("fullName").toString();
+        if (fullName.contains(",")) {
+            String[] parts = fullName.split(",");
+            this.firstName = parts[1].trim();
+            this.lastName = parts[0].trim();
+        } else {
+            String[] parts = fullName.split(" ");
+            if (parts.length == 2) {
+                this.firstName = parts[0].trim();
+                this.lastName = parts[1].trim();
+            } else if (parts.length == 1) {
+                this.firstName = parts[0].trim();
+                this.lastName = "";
+            } else {
+                throw new IllegalArgumentException("Formato nome non valido: " + fullName);
+            }
         }
 
         Map<String, Object> playerInfo = (Map<String, Object>) team.get("playerTeamInfo");
         int birthDateTimestamp = (int) playerInfo.get("birthDateTimestamp");
         this.birthDay = Instant.ofEpochMilli(birthDateTimestamp).atZone(ZoneId.systemDefault()).toLocalDate();
 
-        if (this.firstName.equals(name)){
-            System.out.println("2");
-        }
-
         this.atpRanking = team.get("ranking") != null
                 ? (int) team.get("ranking")
-                : (idRankMap != null ? idRankMap.getOrDefault(Integer.parseInt(this.id), 0) : 0);
-
-        if (this.firstName.equals(name)){
-            System.out.println("2b");
-        }
-
+                : (idRankMap != null ? idRankMap.getOrDefault(Integer.parseInt(String.valueOf(this.id)), 0) : 0);
         this.nationality = ((Map<String, String>) team.get("country")).get("name");
-
-        if (this.firstName.equals(name)){
-            System.out.println("3");
-        }
-
         this.weight = playerInfo.get("weight") != null ? (int) playerInfo.get("weight") : 75;
-
-        if (this.firstName.equals(name)){
-            System.out.println("4");
-        }
         this.height = playerInfo.get("height") != null ? (int) (((Double) playerInfo.get("height")) * 100) : 183;
-
-        if (this.firstName.equals(name)){
-            System.out.println("5");
-        }
     }
 }
