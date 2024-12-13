@@ -191,7 +191,8 @@ public class TennisMatch {
             return null; // Ritorna null se uniqueTournament è assente
         }
 
-        TennisTournament tournament = new TennisTournament();
+        //TennisTournament tournament = new TennisTournament();
+        TennisTournamentDetails details = new TennisTournamentDetails();
 
         // Mappa il nome del torneo
         tournament.setName((String) uniqueTournament.get("name"));
@@ -213,10 +214,11 @@ public class TennisMatch {
             if (yearObj != null) {
                 try {
                     // Se year è una String, proviamo a convertirlo in Integer
-                    tournament.setYears(Integer.parseInt(yearObj.toString()));
+                    int year = Integer.parseInt(yearObj.toString());
+                    details.getSeasons().add(new Season(year, ""));
                 } catch (NumberFormatException e) {
                     // Gestisci l'errore di parsing se la stringa non è un numero
-                    tournament.setYears(0); // Imposta un valore di fallback o fai una gestione adeguata
+                    e.printStackTrace();
                 }
             }
         }
