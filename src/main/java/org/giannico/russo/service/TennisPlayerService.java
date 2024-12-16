@@ -62,13 +62,10 @@ public class TennisPlayerService {
             String playerJson  = sofascoreClient.fetchTennisData(playerEndpoint + playerId);
             TennisPlayer player = tennisPlayerRepository.parseJsonToTennisPlayer(playerJson);
             tennisPlayers.add(player);
-            insertTennisPlayerInDatabase(player);
+            tennisPlayerRepository.insertTennisPlayerInDatabase(player);
         }
         return tennisPlayers;
     }
 
-    private void insertTennisPlayerInDatabase(TennisPlayer player){
-        tennisPlayerRepository.persist(player);
-//        return Response.ok().entity("Giocatore inserito correttamente nel database").build();
-    }
+
 }

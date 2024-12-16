@@ -8,7 +8,8 @@ public class TennisTournamentDetails {
     private LocalDate startDate;
     private LocalDate endDate;
     private List<Group> groups;
-    private String titleHolder;
+    private List<TennisPlayer> titleHolders;
+    private String lastCountryWinner;
 
     public LocalDate getStartDate() {
         return startDate;
@@ -34,12 +35,12 @@ public class TennisTournamentDetails {
         this.groups = groups;
     }
 
-    public String getTitleHolder() {
-        return titleHolder;
+    public List<TennisPlayer> getTitleHolders() {
+        return titleHolders;
     }
 
-    public void setTitleHolder(String titleHolder) {
-        this.titleHolder = titleHolder;
+    public void setTitleHolders(List<TennisPlayer> titleHolders) {
+        this.titleHolders = titleHolders;
     }
 
     public List<Season> getSeasons() {
@@ -48,5 +49,13 @@ public class TennisTournamentDetails {
 
     public void setSeasons(List<Season> seasons) {
         this.seasons = seasons;
+    }
+
+    public String getLastCountryWinner() {
+        return lastCountryWinner;
+    }
+
+    public void setLastCountryWinner(String lastCountryWinner) {
+        this.lastCountryWinner = lastCountryWinner;
     }
 }

@@ -19,4 +19,18 @@ public class TennisPlayerRepository implements PanacheMongoRepository<TennisPlay
     public TennisPlayer parseJsonToTennisPlayer(String json) throws JsonProcessingException {
         return objectMapper.readValue(json, TennisPlayer.class);
     }
+
+    public void insertTennisPlayerInDatabase(TennisPlayer player){
+        persist(player);
+    }
+
+    public TennisPlayer findByFirstNameAndLastName(String firstName, String lastName) {
+        TennisPlayer tennisPlayer = find("{ firstName: { $regex: ?1, $options: \"i\" }, lastName: { $regex: ?2, $options: \"i\" } }", firstName, lastName).firstResult();
+        return tennisPlayer;
+    }
+
+    public TennisPlayer findByLastName(String lastName) {
+        TennisPlayer tennisPlayer = find("{\"lastName\": {\"$regex\": ?1, \"$options\": \"i\"}}", lastName).firstResult();
+        return tennisPlayer;
+    }
 }

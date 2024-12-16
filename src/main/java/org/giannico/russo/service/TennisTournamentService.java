@@ -77,10 +77,6 @@ public class TennisTournamentService {
                     String tournamentLocationEndpoint = "api/v1/unique-tournament/" + tournamentId + "/season/" + seasonId + "/info";
                     String tournamentLocationJson = sofascoreClient.fetchTennisData(tournamentLocationEndpoint);
 
-                    if (tournamentLocationJson.contains("<")) {
-                        System.out.println("Errore: " + tournamentLocationJson);
-                    }
-
                     if (!tournamentLocationJson.contains("404")) {
                         // Estraggo la location del torneo
                         String location = tennisTournamentRepository.parseTournamentLocationFromJson(tournamentLocationJson);
@@ -100,9 +96,6 @@ public class TennisTournamentService {
 
                 // Aggiungi il torneo alla lista
                 tennisTournaments.add(tournament);
-
-                // Stampo un messaggio per ogni torneo
-                System.out.println("Torneo " + tournament.getName() + " aggiunto alla lista");
             }
 
             // Stampo un messaggio per ogni categoria

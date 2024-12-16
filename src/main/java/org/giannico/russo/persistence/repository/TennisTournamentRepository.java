@@ -10,6 +10,7 @@ import org.giannico.russo.rest.model.SeasonsResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @ApplicationScoped
 public class TennisTournamentRepository {
@@ -59,6 +60,10 @@ public class TennisTournamentRepository {
             // Estrai l'array di stagioni
             List<Map<String, Object>> seasons = seasonsResponse.getSeasons();
 
+            if (seasons == null) {
+                return new ArrayList<>();
+            }
+
             // Creo una lista di anni
             List<Integer> years = new ArrayList<>();
 
@@ -92,6 +97,10 @@ public class TennisTournamentRepository {
             // Estrai l'array di stagioni
             List<Map<String, Object>> seasons = seasonsResponse.getSeasons();
 
+            if (seasons == null) {
+                return new ArrayList<>();
+            }
+
             // Converte ogni elemento dell'array (stagione) in un intero, estraendo l'anno
             List<Integer> ids = seasons.stream()
                     .map(season -> (Integer) season.get("id"))
@@ -112,7 +121,12 @@ public class TennisTournamentRepository {
             // Estrai la location
             Map<String, Object> info = infoResponse.getInfo();
 
-            return (String) info.get("hostCity");
+            // Estrai la città
+            String city = (String) info.get("hostCity");
+
+            // Se la città non è presente, restituisci "Not provided"
+            return Objects.requireNonNullElse(city, "Not provided");
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Errore durante il parsing del JSON", e);

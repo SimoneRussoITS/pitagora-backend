@@ -6,14 +6,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.giannico.russo.persistence.model.enums.Category;
 import org.giannico.russo.persistence.model.enums.Status;
+import org.giannico.russo.persistence.repository.TennisPlayerRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @MongoEntity(collection = "tennis-tournament")
 public class TennisTournament {
+    private final TennisPlayerRepository tennisPlayerRepository = new TennisPlayerRepository(null);
+
     @JsonIgnore
     private String id;
     private String name;
@@ -76,9 +81,22 @@ public class TennisTournament {
         this.surface = getSurfaceFromUniqueTournamentData((Map<?, ?>) tournamentData);
         this.category = getCategoryFromUniqueTournamentData((Map<?, ?>) tournamentData);
         this.details = new TennisTournamentDetails();
-        details.setTitleHolder((String) (getTitlesHolderFromUniqueTournamentData((Map<?, ?>) tournamentData)));
+        Object titleHolders = getTitlesHoldersFromUniqueTournamentData((Map<?, ?>) tournamentData);
+        if (titleHolders instanceof String) {
+            this.details.setLastCountryWinner((String) titleHolders);
+        } else { // Altrimenti è una lista di giocatori
+            this.details.setTitleHolders((List<TennisPlayer>) titleHolders);
+        }
         details.setStartDate(getStartDateFromUniqueTournamentData((Map<?, ?>) tournamentData));
         details.setEndDate(getEndDateFromUniqueTournamentData((Map<?, ?>) tournamentData));
+        // Imposto lo status del torneo
+        if (details.getEndDate().isBefore(LocalDate.now())) {
+            this.status = Status.FINISHED;
+        } else if (details.getStartDate().isAfter(LocalDate.now())) {
+            this.status = Status.SCHEDULED;
+        } else { // Altrimenti il torneo è in corso
+            this.status = Status.IN_PROGRESS;
+        }
     }
 
     // Metodo di supporto per deserializzare la data di fine da un oggetto JSON
@@ -109,10 +127,56 @@ public class TennisTournament {
     }
 
     // Metodo di supporto per deserializzare il titleHolder da un oggetto JSON
-    private Object getTitlesHolderFromUniqueTournamentData(Map<?, ?> tournamentData) {
+    private Object getTitlesHoldersFromUniqueTournamentData(Map<?, ?> tournamentData) {
+        // Creo una lista di giocatori in cui inserire il titleHolder o i titleHolders
+        List<TennisPlayer> titleHolders = new ArrayList<>();
+
+        // Estraggo il titleHolder dall'oggetto JSON
         Map<?, ?> titleHolderJson = (Map<?, ?>) tournamentData.get("titleHolder");
         if (titleHolderJson != null) {
-            return titleHolderJson.get("name");
+            // Estraggo lo slug del titleHolder
+            String slug = (String) titleHolderJson.get("slug"); // ex: "rafael-nadal" o "vavassori-a-errani-s"
+            // Divido lo slug in parti
+            List<String> slugParts = List.of(slug.split("-")); // ex: "[sinner, jannik]" o "[vavassori, a, errani, s]"
+            if (!slugParts.isEmpty()) {
+                if (slugParts.size() < 2) {
+                    // Se lo slug ha meno di due parti, non è un giocatore ma una nazione. ex: "italy"
+                    String country = slugParts.getFirst();
+                    return country;
+                } else {
+                    // Se lo slug ha due parti, è un giocatore. ex: "rafael-nadal"
+                    if (slugParts.size() == 2) {
+                        String firstName = slugParts.getLast();
+                        String lastName = slugParts.getFirst();
+                        // query mongoDB per trovare il giocatore  (cerco per nome e cognome, ignorando le maiuscole)
+                        TennisPlayer titleHolder = tennisPlayerRepository.findByFirstNameAndLastName(firstName, lastName);
+                        if (titleHolder == null) {
+                            System.out.println("Giocatore non trovato: " + firstName + " " + lastName);
+                            titleHolder = new TennisPlayer();
+                            titleHolder.setFirstName(firstName);
+                            titleHolder.setLastName(firstName);
+                        }
+                        titleHolders.add(titleHolder);
+                    } else {
+                        // Se lo slug ha più di due parti, è una coppia di giocatori. ex: "vavassori-a-errani-s"
+                        for (String slugPart : slugParts) {
+                            // Se la parte dello slug ha più di una lettera, è un cognome
+                            if (slugPart.length() > 1) {
+                                String lastName = slugPart;
+                                // query mongoDB per trovare il giocatore
+                                TennisPlayer titleHolder = tennisPlayerRepository.findByLastName(lastName);
+                                if (titleHolder == null) {
+                                    System.out.println("Giocatore non trovato: " + lastName);
+                                    titleHolder = new TennisPlayer();
+                                    titleHolder.setLastName(lastName);
+                                }
+                                titleHolders.add(titleHolder);
+                            }
+                        }
+                    }
+                }
+            }
+            return titleHolders;
         } else {
             return null;
         }
