@@ -6,6 +6,30 @@ import java.util.List;
 
 public class Group {
     private GroupLetter groupLetter;
-    private String team;
+    private List<String> teams;
     private List<TennisPlayer> players;
+
+    public GroupLetter getGroupLetter() {
+        return groupLetter;
+    }
+
+    public void setGroupLetter(GroupLetter groupLetter) {
+        this.groupLetter = groupLetter;
+    }
+
+    public List<String> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<String> teams) {
+        this.teams = teams;
+    }
+
+    public List<TennisPlayer> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<TennisPlayer> players) {
+        this.players = players;
+    }
 }

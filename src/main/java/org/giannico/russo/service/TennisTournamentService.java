@@ -2,6 +2,7 @@ package org.giannico.russo.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.giannico.russo.client.SofascoreClient;
+import org.giannico.russo.persistence.model.Group;
 import org.giannico.russo.persistence.model.Season;
 import org.giannico.russo.persistence.model.TennisTournament;
 import org.giannico.russo.persistence.repository.TennisTournamentRepository;
@@ -72,8 +73,12 @@ public class TennisTournamentService {
                 // Creo una lista di locations
                 List<String> locations = new ArrayList<>();
 
+                // Creo una lista di gruppi
+                List<Group> groups = new ArrayList<>();
+
                 // Ciclo per ogni id della stagione
                 for (Integer seasonId : seasonIds) {
+                    // Endpoint per ottenere la location del torneo
                     String tournamentLocationEndpoint = "api/v1/unique-tournament/" + tournamentId + "/season/" + seasonId + "/info";
                     String tournamentLocationJson = sofascoreClient.fetchTennisData(tournamentLocationEndpoint);
 
@@ -85,6 +90,18 @@ public class TennisTournamentService {
                         locations.add(location);
                     } else {
                         locations.add("Not provided");
+                    }
+
+                    // Endpoint per ottenere i gruppi del torneo
+                    String tournamentGroupsEndpoint = "api/v1/unique-tournament/" + tournamentId + "/season/" + seasonId + "/cuptrees";
+                    String tournamentGroupsJson = sofascoreClient.fetchTennisData(tournamentGroupsEndpoint);
+
+                    if (!tournamentGroupsJson.contains("404")) {
+                        // Estraggo i gruppi del torneo
+                        List<Group> tournamentGroups = tennisTournamentRepository.parseTournamentGroupsFromJson(tournamentGroupsJson);
+
+                        // Aggiungi i gruppi alla lista
+                        groups.addAll(tournamentGroups);
                     }
                 }
 

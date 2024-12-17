@@ -11,7 +11,8 @@ public enum GroupLetter {
     E("E"),
     F("F"),
     G("G"),
-    H("H");
+    H("H"),
+    UNKNOWN("Unknown");
 
     private final String description;
 
@@ -31,6 +32,7 @@ public enum GroupLetter {
                 return groupLetter;
             }
         }
-        throw new IllegalArgumentException("Unknown group letter description: " + description);
+
+        return UNKNOWN;
     }
 }

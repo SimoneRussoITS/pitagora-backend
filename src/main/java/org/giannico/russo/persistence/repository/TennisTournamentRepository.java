@@ -2,7 +2,9 @@ package org.giannico.russo.persistence.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.giannico.russo.persistence.model.Group;
 import org.giannico.russo.persistence.model.TennisTournament;
+import org.giannico.russo.rest.model.CupTreesResponse;
 import org.giannico.russo.rest.model.GroupsResponse;
 import org.giannico.russo.rest.model.InfoResponse;
 import org.giannico.russo.rest.model.SeasonsResponse;
@@ -127,6 +129,23 @@ public class TennisTournamentRepository {
             // Se la città non è presente, restituisci "Not provided"
             return Objects.requireNonNullElse(city, "Not provided");
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Errore durante il parsing del JSON", e);
+        }
+    }
+
+    public List<Group> parseTournamentGroupsFromJson(String tournamentGroupsJson) {
+        try {
+            // Deserializza l'oggetto principale (CupTreesResponse) che contiene "cupTrees"
+            CupTreesResponse cupTreesResponse = objectMapper.readValue(tournamentGroupsJson, CupTreesResponse.class);
+
+            // Estrai l'array di cupTrees
+            List<Map<String, Object>> cupTrees = cupTreesResponse.getCupTrees();
+
+            // Converte ogni elemento dell'array (cupTree) in un oggetto Group
+
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Errore durante il parsing del JSON", e);
