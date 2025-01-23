@@ -30,6 +30,8 @@ public class TennisPlayer {
     @BsonProperty("height")
     private int height;
 
+    // TODO: insert Statistics (ObjectId that refers to a set of statistics of the player)
+
     public TennisPlayer() {
 
     }

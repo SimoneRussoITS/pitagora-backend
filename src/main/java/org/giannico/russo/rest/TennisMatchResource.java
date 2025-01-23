@@ -24,4 +24,6 @@ public class TennisMatchResource {
     public List<TennisMatch> getTodayTennisMatches() throws JsonProcessingException {
         return tennisMatchService.getTodayTennisMatches();
     }
+
+    // TODO: Method to get all matches of a player by his name
 }

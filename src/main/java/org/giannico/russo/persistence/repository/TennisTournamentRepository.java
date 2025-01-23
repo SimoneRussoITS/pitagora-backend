@@ -2,7 +2,6 @@ package org.giannico.russo.persistence.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.giannico.russo.persistence.model.Group;
 import org.giannico.russo.persistence.model.TennisTournament;
 import org.giannico.russo.rest.model.CupTreesResponse;
 import org.giannico.russo.rest.model.GroupsResponse;
@@ -143,9 +142,19 @@ public class TennisTournamentRepository {
             // Estrai l'array di cupTrees
             List<Map<String, Object>> cupTrees = cupTreesResponse.getCupTrees();
 
-            // Converte ogni elemento dell'array (cupTree) in un oggetto Group
+            if (cupTrees == null) {
+                return new ArrayList<>();
+            }
 
-            return null;
+            // Creo la lista di gruppi da riempire e ritornare
+            List<Group> groups = new ArrayList<>();
+
+            // Converte ogni elemento dell'array (cupTree) in un oggetto Group
+            for (Map<String, Object> cupTree : cupTrees){
+                Group group = new Group();
+            }
+
+            return groups;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Errore durante il parsing del JSON", e);

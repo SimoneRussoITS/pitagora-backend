@@ -2,8 +2,6 @@ package org.giannico.russo.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.giannico.russo.client.SofascoreClient;
-import org.giannico.russo.persistence.model.Group;
-import org.giannico.russo.persistence.model.Season;
 import org.giannico.russo.persistence.model.TennisTournament;
 import org.giannico.russo.persistence.repository.TennisTournamentRepository;
 import org.slf4j.Logger;
@@ -14,6 +12,7 @@ import java.util.List;
 
 @ApplicationScoped
 public class TennisTournamentService {
+
     private static final Logger log = LoggerFactory.getLogger(TennisTournamentService.class);
     private final SofascoreClient sofascoreClient;
     private final TennisTournamentRepository tennisTournamentRepository;
@@ -27,7 +26,7 @@ public class TennisTournamentService {
         // Creo una lista di TennisTournament che conterrà i tornei
         List<TennisTournament> tennisTournaments = new ArrayList<>();
 
-        // Id che ci servono delle categorie di tennis di SofaScore
+        // Id categorie di tornei su Sofascore (ATP, Challenger, Coppa Davis, ...)
         List<Integer> categories = List.of(3, 74, 72, 76, 79, -100, -101, 785, 1705);
 
         // Ciclo per ogni categoria

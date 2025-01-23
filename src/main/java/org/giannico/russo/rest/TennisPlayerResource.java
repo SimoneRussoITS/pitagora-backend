@@ -24,4 +24,6 @@ public class TennisPlayerResource {
     public List<TennisPlayer> getAllTennisPlayersInAtpRanking() throws JsonProcessingException {
         return tennisPlayerService.getAllTennisPlayersInAtpRanking();
     }
+
+    // TODO: Method to get a player stats by his name
 }
